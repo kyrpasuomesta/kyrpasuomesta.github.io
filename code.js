@@ -555,14 +555,27 @@ function enterOnPainettu() {
 	}
 
 }
-
+/*
 teksti_input.addEventListener("keydown", function(e){
 	if (e.code === "Enter") {
 		enterOnPainettu();
 	}
 });
+*/
+
+//Kokeilua. Loppujen lopuksi tarkoitus on pitää yksi ainoa formi, jokka toimii painamalla enteriä. Eli otetaan mobile_form käyttöönn ympäri sivuston
+
+				/*var juttu = document.getElementById('juttu');
+				function thisFunc() {
+					juttu.innerText += "moi ";
+				};*/
+
+				var form = document.getElementById('mobile_form');
+				form.addEventListener('submit', function(event){
+					event.preventDefault();
+					enterOnPainettu();
+				});
+
+console.log("MITÄ VITTUQ");
 
 
-//if (Math.floor(Math.random() * 10) >= 5) {
-
-//}
