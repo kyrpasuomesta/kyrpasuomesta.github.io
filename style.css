@@ -29,6 +29,24 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
+button {
+	        background: none repeat scroll 0 0 transparent;
+        border: medium none;
+        border-spacing: 0;
+        color: #26589F;
+        font-size: 20px;
+        font-weight: normal;
+        line-height: 1.42rem;
+        list-style: none outside none;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        text-decoration: none;
+        text-indent: 0;
+	font-family: "Lucida Console", monospace;
+}
+
 body {
 	line-height: 1;
 }
@@ -49,7 +67,6 @@ table {
 }
 
 body {
-	padding: 1em;
 	background: black;
 	color:  rgba(0, 128, 0, 1.0);
 	font-size: 1.5em;
@@ -71,7 +88,7 @@ h1 {
 }
 
 input[type=text] {
-	width: /*calc(100vw - 3em)*/ 100%;
+	width: calc(100vw - 3em);
 	display: inline-block;
 	border: none;
 	outline: none;
@@ -80,12 +97,17 @@ input[type=text] {
 	color:  green;
 	font-size: 1em;
 	font-family: "Lucida Console", monospace;
+	text-transform: lowercase;
 
 }
 
 input[type=text]:focus {
 	border: none;
 	outline: none;
+}
+
+input[type=text]::placeholder {
+	color:  rgba(0, 128, 0, 0.6);
 }
 
 *::selection {
@@ -133,6 +155,7 @@ e {
 	font-style: italic;
 }
 
+
 b {
 	font-weight:  bold;
 }
@@ -146,7 +169,7 @@ b {
 	color:  rgba(0, 128, 0, 0.8);
 }
 
-.right_container {
+.menu_bar_container {
 	width: 30%;
   max-height: calc(100vh - 2em);
 	padding: 1em;
@@ -156,6 +179,10 @@ b {
 	right: 0;
   overflow-y: auto;
 
+}
+
+.content_container {
+	width: 70%;
 }
 
 /* width */
@@ -173,4 +200,105 @@ b {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background:  rgba(0, 128, 0, 0.8);
+}
+
+#mediaqueryChecker {
+	width: 20px;
+	display: none;
+}
+
+#yla_valikko {
+	position: fixed;
+	top: 0;
+	display: block;
+	width: calc(100vw - 20px);
+	background: black;
+	padding: 10px;
+	font-size: 27px;
+	display: none;
+}
+
+#yla_valikko span {
+	position: relative;
+	float: right;
+}
+
+#yla_valikko h1 {
+	display: inline;
+}
+
+#page_wrapper {
+	padding: 1em;
+	min-height: calc(100vh - 2em);
+}
+
+#mobiili_tunnuslause {
+	display: none;
+	font-size: 16px;
+	font-style: italic;
+	text-align: center;
+}
+
+.nayta_pienella_ruudulla {
+	display: none;
+}
+
+.small_button {
+	padding: 10px 0px;
+}
+
+.alaspain_arrow {
+	padding-left: 5px;
+	font-style: normal;
+	rotate: 180deg;
+	display: inline-block;
+}
+
+.displayBlockImportant {
+	display: block!important;
+}
+
+
+@media only screen and (max-width: 600px) {
+	.nayta_pienella_ruudulla {
+		display: block;
+	}
+
+	.content_container {
+		width: 100%;
+	}
+
+	.menu_bar_container {
+		display: none;
+		background: black;
+		width: calc(100vw - 2em);
+		margin-top:  2em;
+		min-height: 100vh;
+
+	}
+
+	#yla_valikko {
+		display: block;
+	}
+
+	#mediaqueryChecker {
+		width: 1px;
+	}
+
+	#ison_ruudun_intro {
+		display: none;
+	}
+
+	#page_wrapper {
+		margin-top: 40px;
+		min-height: calc(100vh - 2em - 40px);
+	}
+
+	#jotain {
+		display: none;
+	}
+
+	#mobiili_tunnuslause {
+		display: block;
+	}
 }

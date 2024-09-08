@@ -7,6 +7,9 @@ var nuoli = document.getElementById('nuoli');
 var nuoliWidth = nuoli.getBoundingClientRect().width;
 var currentUser = "";
 var pornoKuva = document.getElementById("pornoKuva");
+var mediaqueryChecker = document.getElementById('mediaqueryChecker');
+var yla_valikko_button = document.getElementById('yla_valikko_button');
+var menu_bar_container = document.getElementsByClassName('menu_bar_container')[0];
 
 
 var d = new Date();
@@ -14,8 +17,8 @@ var ms = Math.round((d.getMilliseconds())*0.01); //saa arvon välillä 0-10
 if (ms >= 7) {
 	ms -= 4; 
 }
-//var ms = 6; /*for testing*/
-var mahdollistenKuvienKoot = [
+//var ms = 2; /*for testing*/
+var mahdollistenKuvienKootIsotRuudut = [
 	/*kuva0*/"0.2em", 
 	/*kuva1*/"0.6em", 
 	/*kuva2*/"0.4em", 
@@ -24,9 +27,20 @@ var mahdollistenKuvienKoot = [
 	/*kuva5*/"0.1em", 
 	/*kuva6*/"0.3em"
 ];
+
+var mahdollistenKuvienKootMobiili = [
+	/*kuva0*/"4px", 
+	/*kuva1*/"10px", 
+	/*kuva2*/"7px", 
+	/*kuva3*/"7px", 
+	/*kuva4*/"4px", 
+	/*kuva5*/"4px", 
+	/*kuva6*/"4px"
+];
+
 var mahdollisetKuvat = [
 //kuva0
-`##+=*+##########%%@%##=-+###%@%#*=+#%%%#%#+---=*+--#@@=  .:**#***+++++##+....#%*  .-=+*+*#
+`##+=*+##########%%@%##=-+###%@%#*=+#%%%#%#+---=*+--#@@=  .:**#***+++++##+....#%*  .-=+*+*
 ##*=*#%*****+#*+***#*%+::*#%@@@@%=+%%%%%###%%##=-:-%@@%**=***%%@%@%%*-+#%:.--##*++::-=**#*
 *+*+*==##+*********+:::-=##%##@%%##@@@@%#**%##*:::-@@@@%#=#**%%%%%%%#**#*++*#*#***#+--:+##
 %%@%@%#@@@@%%%@@%#-:..=%@@%##%%%%#%%@@@@%#%%#%+:+*-%@@@=-++**#%%%%%%*=:+###%###***+:::.:*#
@@ -299,9 +313,34 @@ var mahdollisetKuvat = [
 ⢮⣳⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⡿⠟⠐⠉⠀⠀⠀⠀⠀⢀⠀⠀⠀⣀⣤⣴⣿⣿⣿⣟⣯⣟⡞⣯⢻⡽⣞⠷⣎⡷⣭⢳⣳⣬⡒⣍⠳⢮⣜⡲⣌⢳⣒⢦⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
 `]
-pornoKuva.innerHTML = mahdollisetKuvat[ms];
-pornoKuva.style.fontSize = mahdollistenKuvienKoot[ms];
 
+pornoKuva.innerHTML = mahdollisetKuvat[ms];
+var nykyinenPornosivu = "pornhub.com";
+
+function checkScreenWidth() {
+	if (window.getComputedStyle(mediaqueryChecker, null).getPropertyValue("width") == "20px") {
+		//console.log("viewport on yli 600px");
+		pornoKuva.style.fontSize = mahdollistenKuvienKootIsotRuudut[ms];
+		pornoKuva.style.textAlign = "initial";
+		teksti_input.placeholder = "";
+	} else if (window.getComputedStyle(mediaqueryChecker, null).getPropertyValue("width") == "1px") {
+		//console.log("viewport on alle 600px");
+		pornoKuva.style.fontSize = mahdollistenKuvienKootMobiili[ms];
+		pornoKuva.style.textAlign = "center";
+		teksti_input.placeholder = "Etsi " + nykyinenPornosivu + ":";
+	}
+}
+
+
+
+window.onload = function() {
+	checkScreenWidth();
+}
+
+
+window.onresize = function() {
+	checkScreenWidth();
+}
 
 
 
@@ -320,7 +359,7 @@ function perkele(x) {
 joku.onclick = function() {perkele(this)};*/	
 
 function returnStringJosEiTyhja(inputti) {
-	var inputtiStringiksi = inputti.toString().trim();
+	var inputtiStringiksi = inputti.toString().trim().toLowerCase();
 	if (inputtiStringiksi.length != 0) {
 		return inputtiStringiksi;
 	} else {
@@ -579,3 +618,13 @@ teksti_input.addEventListener("keydown", function(e){
 console.log("MITÄ VITTUQ");
 
 
+
+
+yla_valikko_button.onclick = function() {
+	console.log("Button pressed")
+	if (menu_bar_container.classList.contains("displayBlockImportant")) {
+		menu_bar_container.classList.remove("displayBlockImportant");
+	} else {
+		menu_bar_container.classList.add("displayBlockImportant");
+	}
+}
