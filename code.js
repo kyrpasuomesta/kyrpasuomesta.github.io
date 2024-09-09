@@ -10,6 +10,7 @@ var pornoKuva = document.getElementById("pornoKuva");
 var mediaqueryChecker = document.getElementById('mediaqueryChecker');
 var yla_valikko_button = document.getElementById('yla_valikko_button');
 var menu_bar_container = document.getElementsByClassName('menu_bar_container')[0];
+var mobileModeOn = false;
 
 
 var d = new Date();
@@ -18,6 +19,9 @@ if (ms >= 7) {
 	ms -= 4; 
 }
 //var ms = 2; /*for testing*/
+
+/*KUVIIN LIITTYVÄT ARRAYT*/
+
 var mahdollistenKuvienKootIsotRuudut = [
 	/*kuva0*/"0.2em", 
 	/*kuva1*/"0.6em", 
@@ -315,7 +319,15 @@ var mahdollisetKuvat = [
 `]
 
 pornoKuva.innerHTML = mahdollisetKuvat[ms];
-var nykyinenPornosivu = "pornhub.com";
+//var nykyinenPornosivu = "pornhub.com";
+
+/*TARVITTAVAT ARRAYT*/
+
+priorityKomentojenMaara = ["empty", "sos", "exit"];
+pornoSivujenMaara = ["pornhub.com", "suomiporno.net"];
+pornoSivujenActiveClass = ["PHsearchActiveClass", "SuomipornosearchActiveClass"] //checkkaa, että tämä vastaa ylhäällä olevia
+
+var currentPornWebsite = [""];
 
 function checkScreenWidth() {
 	if (window.getComputedStyle(mediaqueryChecker, null).getPropertyValue("width") == "20px") {
@@ -323,25 +335,27 @@ function checkScreenWidth() {
 		pornoKuva.style.fontSize = mahdollistenKuvienKootIsotRuudut[ms];
 		pornoKuva.style.textAlign = "initial";
 		teksti_input.placeholder = "";
+    if (mobileModeOn) {
+      mobileModeOn = false;
+      console.log("mobiili: " + mobileModeOn);
+      priorityKomento("exit");
+      if (currentPornWebsite.length > 0) {
+        priorityKomento("exit");
+      }
+    }
+
 	} else if (window.getComputedStyle(mediaqueryChecker, null).getPropertyValue("width") == "1px") {
 		//console.log("viewport on alle 600px");
 		pornoKuva.style.fontSize = mahdollistenKuvienKootMobiili[ms];
 		pornoKuva.style.textAlign = "center";
-		teksti_input.placeholder = "Etsi " + nykyinenPornosivu + ":";
+		//teksti_input.placeholder = "Etsi " + nykyinenPornosivu + ":";
+		if (!mobileModeOn) {
+			mobileModeOn = true;
+			console.log("mobiili: " + mobileModeOn);
+      pornoSivustoHakutilaan("pornhub.com", "PHsearchActiveClass");
+		}
 	}
 }
-
-
-
-window.onload = function() {
-	checkScreenWidth();
-}
-
-
-window.onresize = function() {
-	checkScreenWidth();
-}
-
 
 
 /* MUUT KOMENNOT */
@@ -427,30 +441,43 @@ function mikaKomento(inputti) {
 	} 
 }
 
-priorityKomentojenMaara = ["empty", "sos", "exit"];
-pornoSivujenMaara = ["pornhub.com", "suomiporno.net"];
-pornoSivujenActiveClass = ["PHsearchActiveClass", "SuomipornosearchActiveClass"] //checkkaa, että tämä vastaa ylhäällä olevia
+
 
 function priorityKomento(inputti) { //pitäisi callata ainoastaan theBigBadFinalOnSubmitin sisällä
 			if (inputti == "emptyFunktio" || inputti == "empty") {
 				tekstiboksi.innerHTML = "";
+
 			} else if (inputti == "SOS" || inputti == "sos") {
-				window.history.back();
+				//window.history.back();
+        location.replace("https://www.raamattu.fi/");
 			}
 			if (teksti_input.className.length > 0 || inputti == "exit") {
 				nuoli.style.paddingLeft = "initial";
 				teksti_input.className = "";
 				nuoli.innerText = ">";
 				nuoli.style.fontWeight = "normal";
+        if (mobileModeOn) {
+          teksti_input.placeholder = "Kirjoita komento";
+        }
 			}
 }
 
 function pornoSivustoHakutilaan(sivusto, sivustoClass) {
-	nuoli.style.paddingLeft = nuoliWidth + "px";
-	nuoli.innerText = "Etsi " + sivusto + ": ";
-	nuoli.style.fontWeight = "bold";
-	teksti_input.className = "";
-	teksti_input.classList.add(sivustoClass);
+  if (!mobileModeOn) {
+  	nuoli.style.paddingLeft = nuoliWidth + "px";
+  	nuoli.innerText = "Etsi " + sivusto + ": ";
+  	nuoli.style.fontWeight = "bold";
+  	teksti_input.className = "";
+  	teksti_input.classList.add(sivustoClass);
+    teksti_input.style.width = "200%";
+  } else {
+    teksti_input.className = "";
+    teksti_input.classList.add(sivustoClass);
+    teksti_input.placeholder = "Etsi " + sivusto + ":";
+    teksti_input.style.width = "calc(100vw - 3em)";
+  }
+  currentPornWebsite = [sivusto, sivustoClass];
+  console.log("nykyinen sivu: " + currentPornWebsite[0]);
 }
 
 
@@ -566,12 +593,36 @@ function klikkaaKomentoaKirjoittaaksesi() {
 			teksti_input.focus();
 			enterOnPainettu(); 
 		}
-	}
+	} 
+  if (mobileModeOn) {
+    if (menu_bar_container.classList.contains("displayBlockImportant")) {
+      menu_bar_container.classList.remove("displayBlockImportant");
+    } 
+  }
 }
 
-console.log("")
+function enterOnPainettu() {
+  if (teksti_input.classList[0] == "loginForm") {
+    theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "login");
+  } else if (teksti_input.classList[0] == "PHsearchActiveClass") {
+    theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "PHsearchActive");
+  } else if (teksti_input.classList[0] == "SuomipornosearchActiveClass") {
+    theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "SuomipornosearchActive");
+  } else {
+    theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "normal");
+  }
+
+}
+
 tekstiboksi.style.paddingLeft = nuoliWidth + "px";
 
+window.onload = function() {
+  checkScreenWidth();
+}
+
+window.onresize = function() {
+  checkScreenWidth();
+}
 
 btn.onclick = function(){
 	/*tekstiboksi.innerHTML += returnStringJosEiTyhja(teksti_input.value);
@@ -582,18 +633,6 @@ btn.onclick = function(){
 
 klikkaaKomentoaKirjoittaaksesi();
 
-function enterOnPainettu() {
-	if (teksti_input.classList[0] == "loginForm") {
-		theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "login");
-	} else if (teksti_input.classList[0] == "PHsearchActiveClass") {
-		theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "PHsearchActive");
-	} else if (teksti_input.classList[0] == "SuomipornosearchActiveClass") {
-		theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "SuomipornosearchActive");
-	} else {
-		theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "normal");
-	}
-
-}
 /*
 teksti_input.addEventListener("keydown", function(e){
 	if (e.code === "Enter") {

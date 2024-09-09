@@ -258,6 +258,15 @@ b {
 	display: block!important;
 }
 
+.icon {
+	height: 0.9em;
+	width: auto;
+	padding-right: 0.2em;
+}
+
+.pieni_vali {
+	padding-bottom: 0.5em;
+}
 
 @media only screen and (max-width: 600px) {
 	.nayta_pienella_ruudulla {
