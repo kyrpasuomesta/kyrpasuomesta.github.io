@@ -324,8 +324,8 @@ pornoKuva.innerHTML = mahdollisetKuvat[ms];
 /*TARVITTAVAT ARRAYT*/
 
 priorityKomentojenMaara = ["empty", "sos", "exit"];
-pornoSivujenMaara = ["pornhub.com", "suomiporno.net"];
-pornoSivujenActiveClass = ["PHsearchActiveClass", "SuomipornosearchActiveClass"] //checkkaa, että tämä vastaa ylhäällä olevia
+pornoSivujenMaara = ["pornhub.com", "suomiporno.net", "xvideos.com"];
+pornoSivujenActiveClass = ["PHsearchActiveClass", "SuomipornosearchActiveClass", "xvideoActiveClass"] //checkkaa, että tämä vastaa ylhäällä olevia
 
 var currentPornWebsite = [""];
 
@@ -434,7 +434,9 @@ function mikaKomento(inputti) {
 		return [1, "searchPH"];
 	} else if (inputti == "suomiporno" || inputti == "suomiporno.net") {
 		return [1, "searchSuomiporno"];
-	} else if (inputti == "sos") {
+	} else if (inputti == "xvideos" || inputti == "xvideos.com") {
+    return [1, "searchxvideos"];
+  } else if (inputti == "sos") {
 		return [1, "SOS"]; // deletoi selaimen historian
 	}  else {
 		return false;
@@ -555,7 +557,9 @@ function theBigBadFinalOnSubmit(boksi, inputti, tyyppi) {
 						pornoSivustoHakutilaan("pornhub.com", "PHsearchActiveClass");
 					} else if (kokmentoVastausTxt[1] == "searchSuomiporno") {
 						pornoSivustoHakutilaan("suomiporno.net", "SuomipornosearchActiveClass");
-					}
+					} else if(kokmentoVastausTxt[1] == "searchxvideos") {
+            pornoSivustoHakutilaan("xvideos.com", "xvideoActiveClass");
+          }
 					
 				}
 			} 
@@ -572,10 +576,11 @@ function theBigBadFinalOnSubmit(boksi, inputti, tyyppi) {
 			}
 		} else if (tyyppi == "PHsearchActive") {
 			pornonHakuFunktio(inputinPerkele, boksi, "https://www.pornhub.com/video/search?search=");
-
 		} else if (tyyppi == "SuomipornosearchActive") {
 			pornonHakuFunktio(inputinPerkele, boksi, "https://www.suomiporno.net/?s=");
-		}
+		} else if (tyyppi == "xvideoActive") {
+      pornonHakuFunktio(inputinPerkele, boksi, "https://www.xvideos.com/?k=");
+    }
 	}
 	emptyTekstiBoksi(inputti);
 	inputti.focus();
@@ -608,6 +613,8 @@ function enterOnPainettu() {
     theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "PHsearchActive");
   } else if (teksti_input.classList[0] == "SuomipornosearchActiveClass") {
     theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "SuomipornosearchActive");
+  } else if (teksti_input.classList[0] ==  "xvideoActiveClass") {
+    theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "xvideoActive");
   } else {
     theBigBadFinalOnSubmit(tekstiboksi, teksti_input, "normal");
   }
